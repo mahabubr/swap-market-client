@@ -39,7 +39,11 @@ const route = createBrowserRouter([
                     <PrivateRoute>
                         <ProductUpdate />
                     </PrivateRoute>,
-                loader: async ({ params }) => fetch(`http://localhost:5000/product/${params.id}`)
+                loader: async ({ params }) => fetch(`https://swap-market-server-six.vercel.app/product/${params.id}`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('SWAP-MARKET')}`
+                    }
+                })
             },
         ]
     },

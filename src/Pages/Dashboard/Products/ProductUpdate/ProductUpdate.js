@@ -23,7 +23,7 @@ const ProductUpdate = () => {
             price
         }
 
-        fetch(`http://localhost:5000/product/${_id}`, {
+        fetch(`https://swap-market-server-six.vercel.app/product/${_id}`, {
             method: "PUT",
             headers: {
                 'content-type': 'application/json'

@@ -6,6 +6,8 @@ import useAuth from '../../../Hooks/useAuth';
 
 const Products = () => {
 
+    const { logOut, user } = useAuth()
+
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState([]);
     const [count, setCount] = useState(0);
@@ -21,14 +23,23 @@ const Products = () => {
     //email=${email}&
 
     useEffect(() => {
-        fetch(`http://localhost:5000/product?page=${page}&size=${size}`)
-            .then(res => res.json())
+        fetch(`https://swap-market-server-six.vercel.app/product?page=${page}&size=${size}&email=${user?.email}`, {
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('SWAP-MARKET')}`
+            }
+        })
+            .then(res => {
+                if (res.status === 401 || res.status === 403) {
+                    return logOut();
+                }
+                return res.json();
+            })
             .then(data => {
                 setLoading(false)
                 setProducts(data.products)
                 setCount(data.count);
             })
-    }, [page, size])
+    }, [page, size, logOut, user?.email])
 
     if (loading) {
         return <Loader />
@@ -37,7 +48,7 @@ const Products = () => {
     const handleDeleteProduct = (product) => {
         const confirm = window.confirm(`Are Your Sure to Delete ${product.name}`)
         if (confirm) {
-            fetch(`http://localhost:5000/product/${product._id}`, {
+            fetch(`https://swap-market-server-six.vercel.app/product/${product._id}`, {
                 method: "DELETE",
             })
                 .then(res => res.json())

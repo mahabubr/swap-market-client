@@ -31,7 +31,7 @@ const AddProduct = () => {
             email: user.email
         }
 
-        fetch('http://localhost:5000/product', {
+        fetch('https://swap-market-server-six.vercel.app/product', {
             method: "POST",
             headers: {
                 'content-type': 'application/json'

@@ -35,7 +35,26 @@ const SignUp = () => {
                 updateUser(name)
                     .then(() => {
                         toast.success('User Info Update Successful')
-                        navigate(from, { replace: true })
+
+                        const currentUser = {
+                            email: user.email
+                        }
+
+                        // get jwt token
+
+                        fetch('https://swap-market-server-six.vercel.app/jwt', {
+                            method: 'POST',
+                            headers: {
+                                'content-type': 'application/json'
+                            },
+                            body: JSON.stringify(currentUser)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                localStorage.setItem('SWAP-MARKET', data.token);
+                                navigate(from, { replace: true });
+                            });
+
                     })
                     .catch(e => toast.error(e.message))
             })
@@ -48,7 +67,26 @@ const SignUp = () => {
             .then(result => {
                 const user = result.user
                 toast.success('Login Successful')
-                navigate(from, { replace: true })
+
+                const currentUser = {
+                    email: user.email
+                }
+
+                // get jwt token
+
+                fetch('https://swap-market-server-six.vercel.app/jwt', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(currentUser)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        localStorage.setItem('SWAP-MARKET', data.token);
+                        navigate(from, { replace: true });
+                    });
+
             })
             .catch(e => toast.error(e.message))
     }
