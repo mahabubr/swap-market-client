@@ -7,11 +7,11 @@ import useAuth from '../../../Hooks/useAuth';
 const Products = () => {
 
     const [loading, setLoading] = useState(true)
-
     const [products, setProducts] = useState([]);
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(5);
+    const [search, setSearch] = useState('')
 
     const pages = Math.ceil(count / size);
 
@@ -52,12 +52,11 @@ const Products = () => {
         }
     }
 
-
     return (
         <div>
             <div className='md:flex space-y-4 md:space-y-0 justify-between my-2'>
-            <h2 className='text-3xl font-semibold text-center'>Products</h2>
-                <input name='img' required type="text" placeholder="Search Here" className="input input-bordered w-full md:w-8/12 lg:w-6/12" />
+                <h2 className='text-3xl font-semibold text-center'>Products</h2>
+                <input onChange={(e) => setSearch(e.target.value)} name='search' required type="text" placeholder="Search By Name" className="input input-bordered w-full md:w-8/12 lg:w-6/12" />
             </div>
             <div className="overflow-x-auto w-full">
                 <table className="table w-full">
@@ -72,34 +71,43 @@ const Products = () => {
                     <tbody>
 
                         {
-                            products.map(product =>
-                                <tr key={product._id}>
-                                    <td>
-                                        <div className="flex items-center space-x-3">
-                                            <div className="avatar">
-                                                <div className="mask mask-squircle w-12 h-12">
-                                                    <img src={product.img} alt="Products" />
+                            products
+                                .filter((value) => {
+                                    if (search === '') {
+                                        return value
+                                    }
+                                    else if (value.name.toLowerCase().includes(search.toLowerCase())) {
+                                        return value
+                                    }
+                                })
+                                .map(product =>
+                                    <tr key={product._id}>
+                                        <td>
+                                            <div className="flex items-center space-x-3">
+                                                <div className="avatar">
+                                                    <div className="mask mask-squircle w-12 h-12">
+                                                        <img src={product.img} alt="Products" />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="font-bold">{product.name.slice(0, 30)}</div>
+                                                    <div className="text-sm opacity-50">{product.location}</div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <div className="font-bold">{product.name.slice(0, 30)}</div>
-                                                <div className="text-sm opacity-50">{product.location}</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        $ {product.price}
-                                        <br />
-                                        <span className="badge badge-ghost badge-sm">{product.category}</span>
-                                    </td>
-                                    <th>
-                                        <Link to={`/product-update/${product._id}`}>
-                                            <button className="btn btn-ghost btn-xs">Update</button>
-                                        </Link>
-                                        <button onClick={() => handleDeleteProduct(product)} className="btn btn-ghost btn-xs">Delete</button>
-                                    </th>
-                                </tr>
-                            )
+                                        </td>
+                                        <td>
+                                            $ {product.price}
+                                            <br />
+                                            <span className="badge badge-ghost badge-sm">{product.category}</span>
+                                        </td>
+                                        <th>
+                                            <Link to={`/product-update/${product._id}`}>
+                                                <button className="btn btn-ghost btn-xs">Update</button>
+                                            </Link>
+                                            <button onClick={() => handleDeleteProduct(product)} className="btn btn-ghost btn-xs">Delete</button>
+                                        </th>
+                                    </tr>
+                                )
                         }
 
                     </tbody>
