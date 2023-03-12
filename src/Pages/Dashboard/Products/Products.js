@@ -57,6 +57,34 @@ const Products = () => {
                         toast.success(`${product.name} Deleted Successful`)
                         const remainingProduct = products.filter(pd => pd._id !== product._id)
                         setProducts(remainingProduct)
+
+                        // Send Data to Delete Collection
+
+                        const deletedInfo = {
+                            img: product.img,
+                            name: product.name,
+                            price: product.price,
+                            location: product.location,
+                            description: product.description,
+                            category: product.category,
+                            email: user.email
+                        }
+
+                        fetch('https://swap-market-server-six.vercel.app/deleted-items', {
+                            method: "POST",
+                            headers: {
+                                'content-type': 'application/json'
+                            },
+                            body: JSON.stringify(deletedInfo)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.acknowledged) {
+                                    toast.success('Soft Deleted Successful')
+                                }
+                            })
+                            .catch(e => toast.error(e.message))
+
                     }
                 })
                 .catch(e => toast.error(e.message))
@@ -69,6 +97,7 @@ const Products = () => {
                 <h2 className='text-3xl font-semibold text-center'>Products</h2>
                 <input onChange={(e) => setSearch(e.target.value)} name='search' required type="text" placeholder="Search By Name" className="input input-bordered w-full md:w-8/12 lg:w-6/12" />
             </div>
+
             <div className="overflow-x-auto w-full">
                 <table className="table w-full">
                     {/* head */}
@@ -122,14 +151,6 @@ const Products = () => {
                         }
 
                     </tbody>
-                    {/* foot */}
-                    {/* <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Update / Delete</th>
-                        </tr>
-                    </tfoot> */}
                 </table>
             </div>
 

@@ -24,6 +24,9 @@ const MainLayout = () => {
                         <li>
                             <NavLink to='/products' end className={({ isActive }) => isActive ? 'btn btn-success' : ''}>Products</NavLink>
                         </li>
+                        <li>
+                            <NavLink to='/deleted-items' end className={({ isActive }) => isActive ? 'btn btn-success' : ''}>Deleted Items</NavLink>
+                        </li>
                     </ul>
                 </div>
             </div>

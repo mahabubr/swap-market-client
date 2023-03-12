@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../Layout/MainLayout";
 import AddProduct from "../Pages/Dashboard/AddProduct/AddProduct";
+import DeletedItems from "../Pages/Dashboard/DeletedItems/DeletedItems";
 import Products from "../Pages/Dashboard/Products/Products";
 import ProductUpdate from "../Pages/Dashboard/Products/ProductUpdate/ProductUpdate";
 import Login from "../Pages/LoginAndSIgnUp/Login";
@@ -44,6 +45,13 @@ const route = createBrowserRouter([
                         authorization: `Bearer ${localStorage.getItem('SWAP-MARKET')}`
                     }
                 })
+            },
+            {
+                path: '/deleted-items',
+                element:
+                    <PrivateRoute>
+                        <DeletedItems />
+                    </PrivateRoute>
             },
         ]
     },
